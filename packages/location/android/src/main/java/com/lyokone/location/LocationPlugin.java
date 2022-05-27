@@ -29,97 +29,97 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
-        methodCallHandler = new MethodCallHandlerImpl();
-        methodCallHandler.startListening(binding.getBinaryMessenger());
-        streamHandlerImpl = new StreamHandlerImpl();
-        streamHandlerImpl.startListening(binding.getBinaryMessenger());
+        // methodCallHandler = new MethodCallHandlerImpl();
+        // methodCallHandler.startListening(binding.getBinaryMessenger());
+        // streamHandlerImpl = new StreamHandlerImpl();
+        // streamHandlerImpl.startListening(binding.getBinaryMessenger());
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        if (methodCallHandler != null) {
-            methodCallHandler.stopListening();
-            methodCallHandler = null;
-        }
-        if (streamHandlerImpl != null) {
-            streamHandlerImpl.stopListening();
-            streamHandlerImpl = null;
-        }
+        // if (methodCallHandler != null) {
+        //     methodCallHandler.stopListening();
+        //     methodCallHandler = null;
+        // }
+        // if (streamHandlerImpl != null) {
+        //     streamHandlerImpl.stopListening();
+        //     streamHandlerImpl = null;
+        // }
     }
 
     private void attachToActivity(ActivityPluginBinding binding) {
-        activityBinding = binding;
-        activityBinding.getActivity().bindService(new Intent(binding.getActivity(), FlutterLocationService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        // activityBinding = binding;
+        // activityBinding.getActivity().bindService(new Intent(binding.getActivity(), FlutterLocationService.class), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private void detachActivity() {
-        dispose();
+        // dispose();
 
-        activityBinding.getActivity().unbindService(serviceConnection);
-        activityBinding = null;
+        // activityBinding.getActivity().unbindService(serviceConnection);
+        // activityBinding = null;
     }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        this.attachToActivity(binding);
+        // this.attachToActivity(binding);
     }
 
     @Override
     public void onDetachedFromActivity() {
-        this.detachActivity();
+        // this.detachActivity();
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        this.detachActivity();
+        // this.detachActivity();
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        this.attachToActivity(binding);
+        // this.attachToActivity(binding);
     }
 
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
+    // private final ServiceConnection serviceConnection = new ServiceConnection() {
 
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.d(TAG, "Service connected: " + name);
-            initialize(((FlutterLocationService.LocalBinder) service).getService());
-        }
+    //     @Override
+    //     public void onServiceConnected(ComponentName name, IBinder service) {
+    //         Log.d(TAG, "Service connected: " + name);
+    //         initialize(((FlutterLocationService.LocalBinder) service).getService());
+    //     }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.d(TAG, "Service disconnected:" + name);
-        }
-    };
+    //     @Override
+    //     public void onServiceDisconnected(ComponentName name) {
+    //         Log.d(TAG, "Service disconnected:" + name);
+    //     }
+    // };
 
-    private void initialize(FlutterLocationService service) {
-        locationService = service;
+    // private void initialize(FlutterLocationService service) {
+    //     locationService = service;
 
-        locationService.setActivity(activityBinding.getActivity());
+    //     locationService.setActivity(activityBinding.getActivity());
 
-        activityBinding.addActivityResultListener(locationService.getLocationActivityResultListener());
-        activityBinding.addRequestPermissionsResultListener(locationService.getLocationRequestPermissionsResultListener());
-        activityBinding.addRequestPermissionsResultListener(locationService.getServiceRequestPermissionsResultListener());
+    //     activityBinding.addActivityResultListener(locationService.getLocationActivityResultListener());
+    //     activityBinding.addRequestPermissionsResultListener(locationService.getLocationRequestPermissionsResultListener());
+    //     activityBinding.addRequestPermissionsResultListener(locationService.getServiceRequestPermissionsResultListener());
 
-        methodCallHandler.setLocation(locationService.getLocation());
-        methodCallHandler.setLocationService(locationService);
+    //     methodCallHandler.setLocation(locationService.getLocation());
+    //     methodCallHandler.setLocationService(locationService);
 
-        streamHandlerImpl.setLocation(locationService.getLocation());
-    }
+    //     streamHandlerImpl.setLocation(locationService.getLocation());
+    // }
 
-    private void dispose() {
-        streamHandlerImpl.setLocation(null);
+    // private void dispose() {
+    //     streamHandlerImpl.setLocation(null);
 
-        methodCallHandler.setLocationService(null);
-        methodCallHandler.setLocation(null);
+    //     methodCallHandler.setLocationService(null);
+    //     methodCallHandler.setLocation(null);
 
-        activityBinding.removeRequestPermissionsResultListener(locationService.getServiceRequestPermissionsResultListener());
-        activityBinding.removeRequestPermissionsResultListener(locationService.getLocationRequestPermissionsResultListener());
-        activityBinding.removeActivityResultListener(locationService.getLocationActivityResultListener());
+    //     activityBinding.removeRequestPermissionsResultListener(locationService.getServiceRequestPermissionsResultListener());
+    //     activityBinding.removeRequestPermissionsResultListener(locationService.getLocationRequestPermissionsResultListener());
+    //     activityBinding.removeActivityResultListener(locationService.getLocationActivityResultListener());
 
-        locationService.setActivity(null);
+    //     locationService.setActivity(null);
 
-        locationService = null;
-    }
+    //     locationService = null;
+    // }
 }
